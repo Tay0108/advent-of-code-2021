@@ -78,8 +78,6 @@ func getGasRating(list []string, gas string) int64 {
 		}
 
 		if ones >= zeros {
-			// for oxygen it passes when amount of 1 is not less than amount of 0, then it leaves those with 1
-			// for co2 it passes when amount of 0 is not less than amount of 1, then it leaves those with 0
 			output = filterValues(output, index, one)
 		} else {
 			output = filterValues(output, index, zero)
