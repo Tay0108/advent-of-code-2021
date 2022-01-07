@@ -27,8 +27,70 @@ func loadFileToSlice(path string) []int64 {
 	return inputData
 }
 
-func bitHasNotLessOnesThanZeroes(position int, bitCount [12]int, numberOfLines int) bool {
-	return numberOfLines/2-bitCount[position] <= 0
+func loadFileToStringSlice(path string) []string {
+	file, error := os.Open(path)
+	if error != nil {
+		log.Fatal(error)
+	}
+	scanner := bufio.NewScanner(file)
+
+	var inputData []string
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		inputData = append(inputData, line)
+	}
+
+	file.Close()
+
+	return inputData
+}
+
+func filterValues(list []string, position int, value byte) []string {
+	var newList []string
+
+	for _, line := range list {
+		if line[position] == value {
+			newList = append(newList, line)
+		}
+	}
+	return newList
+}
+
+func getGasRating(list []string, gas string) int64 {
+	output := list
+	var zero, one byte = '0', '1'
+
+	if gas == "co2" {
+		zero = '1'
+		one = '0'
+	}
+
+	for index := 0; index < len(list[index]); index++ {
+		var zeros, ones int
+
+		for _, value := range output {
+			if value[index] == '0' {
+				zeros += 1
+			} else {
+				ones += 1
+			}
+		}
+
+		if ones >= zeros {
+			// for oxygen it passes when amount of 1 is not less than amount of 0, then it leaves those with 1
+			// for co2 it passes when amount of 0 is not less than amount of 1, then it leaves those with 0
+			output = filterValues(output, index, one)
+		} else {
+			output = filterValues(output, index, zero)
+		}
+		if len(output) == 1 {
+			break
+		}
+	}
+
+	number, _ := strconv.ParseInt(output[0], 2, 64)
+	return number
 }
 
 func main() {
@@ -66,5 +128,13 @@ func main() {
 	fmt.Println("Power comsumption:", gamma*epsilon)
 
 	// part2:
+	stringDataOxygen := loadFileToStringSlice("./input.txt")
+	stringDataCO2 := loadFileToStringSlice("./input.txt")
 
+	oxygenRating := getGasRating(stringDataOxygen, "oxygen")
+	co2Rating := getGasRating(stringDataCO2, "co2")
+
+	fmt.Println("Oxygen generator rating", oxygenRating)
+	fmt.Println("CO2 scrubber rating", co2Rating)
+	fmt.Println("Life support rating", oxygenRating*co2Rating)
 }
