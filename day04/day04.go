@@ -154,12 +154,3 @@ func main() {
 	bingoInputSequence, bingoBoards := loadInputFile("./input.txt")
 	playBingo(&bingoInputSequence, &bingoBoards)
 }
-
-/*
-	Algorytm:
-	1. Bierzemy kolejny numer z sekwencji
-	2. Sprawdzamy kazdą z plansz:
-	3. szukamy podanego numeru w planszy iterując po niej.
-	4. Jeśli liczba znajduje się na planszy zamalowujemy ją (jakaś mapa?), a następnie sprawdzamy kolumnę i wiersz do której nalezy, czy jest juz zwyciestwo. Jesli jest zwyciestwo to zwroc numer planszy (i z petli + 1)
-	5. Sprawdzamy kolejna plansze jesli nie ma zwyciestwa
-*/
